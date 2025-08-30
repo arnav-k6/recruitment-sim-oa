@@ -1,4 +1,6 @@
 import numpy as np
+import math
+
 
 def final_disk_speed(height: float, length: float, incline: float, mass: float, friction: float, radius: float) -> float:
     """
@@ -11,15 +13,20 @@ def final_disk_speed(height: float, length: float, incline: float, mass: float, 
     :param radius: the radius of the disk (meters)
     :return: the speed of the disk (m/s)
     """
-    # Formula used: GPE1 + KE1 + RotationalKE1 = GPE2 + KE1 + RotationalKE2
-    # mgh + 0 + 0 = 0 + 1/2*mv^2 + 1/2*I*w^2
-    # mgh = 1/2*mv^2 + 1/2*I*w^2
-    # mgh = 1/2*mv^2 + 1/4*m*r^2*(v^2/r^2)
-    # mgh = 1/2*mv^2 + 1/4*m*v^2
-    # mgh = 3/4*mv^2
-    # gh = 3/4*v^2
-    # v = sqrt(4/3*gh)
-    # Note: I am assuming no slipping (only rolling through the incline), so friction is neglected.
-    return math.sqrt((4/3)*9.81*height))
+    # The final energy includes translational and rotational kinetic energy
+    # E_final = 1/2 * m * v^2 + 1/2 * I * w^2
+    # For a disk, I = 1/2 * m * r^2, and w = v/r
+    # E_final = 1/2 * m * v^2 + 1/2 * (1/2 * m * r^2) * (v/r)^2
+    # E_final = 1/2 * m * v^2 + 1/4 * m * v^2
+    # E_final = 3/4 * m * v^2
+    # v = sqrt((4/3) * E_final / m)
+    gravity = 9.81
+    initial_energy = mass*gravity*height
+    incline_rad = math.radians(incline)
+    work_by_friction = friction*mass*gravity*math.cos(incline_rad) * length
 
+    energy_final = initial_energy - work_by_friction
+    if energy_final <= 0:
+        return 0.0
 
+    return math.sqrt((4/3)*energy_final/mass)
