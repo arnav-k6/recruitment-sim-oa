@@ -20,6 +20,6 @@ def final_disk_speed(height: float, length: float, incline: float, mass: float, 
     # gh = 3/4*v^2
     # v = sqrt(4/3*gh)
     # Note: I am assuming no slipping (only rolling through the incline), so friction is neglected.
-    return math.sqrt((4/3)*9.81*height)
+    return math.sqrt((4/3)*9.81*height))
 
 
